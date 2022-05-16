@@ -5,13 +5,16 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>domain-basic</module>
+		<module>domain-test</module>
 	</modules>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.6.7</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
+	
 	<groupId>com.example</groupId>
 	<artifactId>transaction-test</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
