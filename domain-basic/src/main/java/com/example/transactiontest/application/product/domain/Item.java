@@ -7,6 +7,7 @@ import lombok.Getter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -26,16 +27,39 @@ public abstract class Item {
 	@ManyToMany(mappedBy = "items")
 	private final List<Category> categories = new ArrayList<>();
 
+	protected Item() {}
+
+	public Item(Long id, String name, int price, int stockQuantity) {
+		Objects.requireNonNull(id, "required id");
+		this.id = id;
+		this.name = name;
+		this.price = price;
+		this.stockQuantity = stockQuantity;
+	}
+
 	// business logic
 	public void addStock(int quantity) {
 		this.stockQuantity += quantity;
 	}
 
-	public void remoteStock(int quantity) {
+	public void removeStock(int quantity) {
 		int restStock = this.stockQuantity - quantity;
 		if (restStock < 0) {
 			throw new NotEnoughStockException("need more stock");
 		}
 		this.stockQuantity = restStock;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Item)) return false;
+		Item item = (Item) o;
+		return Objects.equals(id, item.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
