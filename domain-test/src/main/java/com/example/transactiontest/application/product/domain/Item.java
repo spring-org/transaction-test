@@ -2,7 +2,6 @@ package com.example.transactiontest.application.product.domain;
 
 import com.example.transactiontest.application.category.domain.Category;
 import com.example.transactiontest.application.product.exception.NotEnoughStockException;
-import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.*;
@@ -21,19 +20,22 @@ public abstract class Item {
 	@Column(name = "ITEM_ID")
 	private Long id;
 
-	private final String name;
-	private final int price;
+	private String name;
+	private int price;
 	private int stockQuantity;
 
+	@ManyToMany(mappedBy = "items")
+	private final List<Category> categories = new ArrayList<>();
+
+	protected Item() {}
+
 	public Item(Long id, String name, int price, int stockQuantity) {
+		Objects.requireNonNull(id, "required id");
 		this.id = id;
 		this.name = name;
 		this.price = price;
 		this.stockQuantity = stockQuantity;
 	}
-
-	@ManyToMany(mappedBy = "items")
-	private final List<Category> categories = new ArrayList<>();
 
 	// business logic
 	public void addStock(int quantity) {
