@@ -3,7 +3,6 @@ package com.example.transactiontest.application.order.domain;
 import com.example.transactiontest.application.product.domain.Item;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 
@@ -31,6 +30,8 @@ public class OrderItem {
 	private int orderPrice;
 	@Setter
 	private int count;
+
+	protected OrderItem() {}
 
 	// 생성 메서드
 	public static OrderItem createOrderItem(Item item, int orderPrice, int count) {

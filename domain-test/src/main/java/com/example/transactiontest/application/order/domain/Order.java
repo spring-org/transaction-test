@@ -27,7 +27,7 @@ public class Order {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private final List<OrderItem> orderItems = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	@JoinColumn(name = "DELIVERY_ID")
 	private Delivery delivery;
 
@@ -38,6 +38,7 @@ public class Order {
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
 
+	// 연관관계 메서드
 	public void setMember(Member member) {
 		this.member = member;
 		member.getOrders().add(this);
@@ -78,6 +79,7 @@ public class Order {
 		}
 	}
 
+	// 조회
 	public int getTotalPrice() {
 		int totalPrice = 0;
 		for (OrderItem orderItem : orderItems) {
