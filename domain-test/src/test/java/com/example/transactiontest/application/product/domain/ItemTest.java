@@ -13,14 +13,14 @@ class ItemTest {
 
 	@Nested
 	@DisplayName("생성 관련")
-	class Creator {
+	class CreateTest {
 
 		private Item actual;
 
 		@BeforeEach
 		void setUp() {
-			actual = Album.builder()
-					.id(1L).name("이름").artist("작가").etc("그외")
+			actual = new Album.Builder(1L)
+					.name("이름").artist("작가").etc("그외")
 					.price(1000)
 					.stockQuantity(10)
 					.build();
@@ -29,13 +29,12 @@ class ItemTest {
 		@DisplayName("앨범 생성하기")
 		@Test
 		void testCase1() {
-			Item expected = Album.builder()
-					.id(1L)
+			Item expected = new Album.Builder(1L)
 					.price(1000)
 					.stockQuantity(10)
 					.build();
 
-			assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+			assertThat(actual).isEqualTo(expected);
 		}
 	}
 }

@@ -23,7 +23,7 @@ public class Book extends Item {
 		return "[제목:" + getName() + " 저자:" + author + "]";
 	}
 
-	static class Builder {
+	public static class Builder {
 		private final Long id;
 		private String name;
 		private int price;

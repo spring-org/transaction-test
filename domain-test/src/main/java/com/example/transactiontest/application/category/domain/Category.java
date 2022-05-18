@@ -26,12 +26,23 @@ public class Category {
 	)
 	private final List<Item> items = new ArrayList<>();
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "PARENT_ID")
 	private Category parent;
 
 	@OneToMany(mappedBy = "parent")
 	private final List<Category> child = new ArrayList<>();
+
+	protected Category() {}
+
+	private Category(Long id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+
+	public static Category of(Long id, String name) {
+		return new Category(id, name);
+	}
 
 	public void addChildCategory(Category child) {
 		this.child.add(child);
