@@ -29,7 +29,7 @@ public class Album extends Item {
 				'}';
 	}
 
-	static class Builder {
+	public static class Builder {
 		private final Long id;
 		private String name;
 		private int price;

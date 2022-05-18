@@ -26,7 +26,7 @@ public class Movie extends Item {
 		return "[제목:" + getName() + " 감독:" + director + " 배우:" + actor + "]";
 	}
 
-	static class Builder {
+	public static class Builder {
 		private final Long id;
 		private String name;
 		private int price;
