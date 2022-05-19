@@ -27,7 +27,8 @@ public abstract class Item {
 	@ManyToMany(mappedBy = "items")
 	private final List<Category> categories = new ArrayList<>();
 
-	protected Item() {}
+	protected Item() {
+	}
 
 	public Item(Long id, String name, int price, int stockQuantity) {
 		Objects.requireNonNull(id, "required id");

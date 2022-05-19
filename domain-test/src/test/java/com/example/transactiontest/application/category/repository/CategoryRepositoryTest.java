@@ -1,7 +1,10 @@
 package com.example.transactiontest.application.category.repository;
 
 import com.example.transactiontest.application.category.domain.Category;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,10 +49,12 @@ class CategoryRepositoryTest {
 		@DisplayName("카테고리1 생성 및 추가")
 		@Test
 		void testCase1() {
+			Category category = Category.of(1L, "1depth");
 			Category child1 = Category.of(2L, "2-1depth");
-			category.addChildCategory(child1);
+			Category category1 = category.addChildCategory(child1);
 
-			assertThat(child1.getParent()).isEqualTo(category);
+			System.out.println("child1 = " + child1);
+			assertThat(child1.getParent()).isEqualTo(category1);
 		}
 	}
 }
