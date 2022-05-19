@@ -10,17 +10,13 @@ public class Book extends Item {
 	private String author;
 	private String isbn;
 
-	protected Book() {}
-
-	private Book(Long id, String name, int price, int stockQuantity, String author, String isbn) {
-		super(id, name, price, stockQuantity);
-		this.author = author;
-		this.isbn = isbn;
+	protected Book() {
 	}
 
-	@Override
-	public String toString() {
-		return "[제목:" + getName() + " 저자:" + author + "]";
+	private Book(Builder builder) {
+		super(builder.id, builder.name, builder.price, builder.stockQuantity);
+		this.author = builder.author;
+		this.isbn = builder.isbn;
 	}
 
 	public static class Builder {
@@ -62,7 +58,13 @@ public class Book extends Item {
 		}
 
 		public Book build() {
-			return new Book(id, name, price, stockQuantity, author, isbn);
+			return new Book(this);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "[제목:" + getName() + " 저자:" + author + "]";
+	}
+
 }

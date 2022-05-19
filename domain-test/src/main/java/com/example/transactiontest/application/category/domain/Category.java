@@ -33,7 +33,8 @@ public class Category {
 	@OneToMany(mappedBy = "parent")
 	private final List<Category> child = new ArrayList<>();
 
-	protected Category() {}
+	protected Category() {
+	}
 
 	private Category(Long id, String name) {
 		this.id = id;
@@ -44,9 +45,10 @@ public class Category {
 		return new Category(id, name);
 	}
 
-	public void addChildCategory(Category child) {
+	public Category addChildCategory(Category child) {
 		this.child.add(child);
 		child.setParent(this);
+		return this;
 	}
 
 	private void setParent(Category category) {

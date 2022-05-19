@@ -31,7 +31,8 @@ public class OrderItem {
 	@Setter
 	private int count;
 
-	protected OrderItem() {}
+	protected OrderItem() {
+	}
 
 	// 생성 메서드
 	public static OrderItem createOrderItem(Item item, int orderPrice, int count) {

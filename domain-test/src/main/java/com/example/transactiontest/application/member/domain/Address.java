@@ -12,12 +12,29 @@ public class Address {
 	private String street;
 	private String zipcode;
 
-	protected Address() {}
+	protected Address() {
+	}
 
-	public Address(String city, String street, String zipcode) {
-		this.city = city;
-		this.street = street;
-		this.zipcode = zipcode;
+	private Address(Builder builder) {
+		this.city = builder.city;
+		this.street = builder.street;
+		this.zipcode = builder.zipcode;
+	}
+
+	public static class Builder {
+		private final String city;
+		private final String street;
+		private final String zipcode;
+
+		public Builder(String city, String street, String zipcode) {
+			this.city = city;
+			this.street = street;
+			this.zipcode = zipcode;
+		}
+
+		public Address build() {
+			return new Address(this);
+		}
 	}
 
 	@Override
