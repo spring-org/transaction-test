@@ -13,7 +13,8 @@ public class Album extends Item {
 	private String artist;
 	private String etc;
 
-	protected Album() {}
+	protected Album() {
+	}
 
 	private Album(Builder builder) {
 		super(builder.id, builder.name, builder.price, builder.stockQuantity);
