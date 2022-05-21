@@ -16,7 +16,6 @@ import java.util.List;
 public class Order {
 
 	@Id
-	@GeneratedValue
 	@Column(name = "ORDER_ID")
 	private Long id;
 

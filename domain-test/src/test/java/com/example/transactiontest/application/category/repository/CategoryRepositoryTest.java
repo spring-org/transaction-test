@@ -51,10 +51,10 @@ class CategoryRepositoryTest {
 		void testCase1() {
 			Category category = Category.of(1L, "1depth");
 			Category child1 = Category.of(2L, "2-1depth");
-			Category category1 = category.addChildCategory(child1);
+			category.addChildCategory(child1);
 
 			System.out.println("child1 = " + child1);
-			assertThat(child1.getParent()).isEqualTo(category1);
+			assertThat(child1.getParent()).isEqualTo(category);
 		}
 	}
 }

@@ -7,7 +7,7 @@ public abstract class BusinessRuntimeException extends RuntimeException {
 	private final String message;
 	private final Object[] params;
 
-	public BusinessRuntimeException(String message, Object[] params) {
+	public BusinessRuntimeException(String message, Object... params) {
 		this.message = message;
 		this.params = params;
 	}
