@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static com.example.transactiontest.core.exception.utils.ArgumentUtils.existsParam;
+
 @Getter
 @Entity
 public class Member {
@@ -26,13 +28,32 @@ public class Member {
 	protected Member() {
 	}
 
-	private Member(Long id, String name, Address address) {
-		this.id = id;
-		this.name = name;
-		this.address = address;
+	private Member(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.address = builder.address;
 	}
 
-	static class Builder {
+	public Member update(String name, Address address) {
+		this.name = existsParam(name, this.name);
+		this.address = existsParam(address, this.address);
+		return this;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Member)) return false;
+		Member member = (Member) o;
+		return Objects.equals(id, member.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	public static class Builder {
 		private final Long id;
 		private String name;
 		private Address address;
@@ -52,20 +73,7 @@ public class Member {
 		}
 
 		public Member build() {
-			return new Member(id, name, address);
+			return new Member(this);
 		}
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (!(o instanceof Member)) return false;
-		Member member = (Member) o;
-		return Objects.equals(id, member.id);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
 	}
 }
