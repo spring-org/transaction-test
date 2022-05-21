@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -75,7 +76,15 @@ class CategoryQueryServiceTest {
 		@DisplayName("카테고리 하위 노드 조회 테스트")
 		@Test
 		void testCase2() {
+			Category parent = mock(Category.class); // 값을 검증하기 위한 parent
+			Category child = Category.of(2L, "상의");
 
+			given(categoryRepository.findById(anyLong())).willReturn(Optional.of(parent));
+			given(parent.getChild()).willReturn(Collections.singletonList(child));
+
+			List<Category> childCategories = categoryQueryService.findChildCategories(parent.getId());
+
+			assertThat(childCategories).contains(child);
 		}
 	}
 }

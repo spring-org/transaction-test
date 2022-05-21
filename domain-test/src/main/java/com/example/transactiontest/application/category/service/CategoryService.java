@@ -19,13 +19,6 @@ public class CategoryService implements CategoryQueryService, CategoryCommandSer
 		this.categoryRepository = categoryRepository;
 	}
 
-	@Transactional
-	@Override
-	public Category save(Long categoryId, String categoryName) {
-		Category category = Category.of(categoryId, categoryName);
-		return categoryRepository.save(category);
-	}
-
 	@Transactional(readOnly = true)
 	@Override
 	public Category findCategory(Long categoryId) {
@@ -49,18 +42,24 @@ public class CategoryService implements CategoryQueryService, CategoryCommandSer
 
 	@Transactional(readOnly = true)
 	@Override
-	public List<Category> findChildCategories(Long categoryId) {
-		List<Category> childCategories = findCategory(categoryId).getChild();
+	public List<Category> findChildCategories(Long parentCategoryId) {
+		List<Category> childCategories = findCategory(parentCategoryId).getChild();
 		return Optional.ofNullable(childCategories)
 				.orElseThrow(() -> new NotFoundCategoryException("하위 카테고리가 존재하지 않습니다."));
 	}
 
+	@Transactional
+	@Override
+	public Category save(Long categoryId, String categoryName) {
+		Category category = Category.of(categoryId, categoryName);
+		return categoryRepository.save(category);
+	}
+
+	@Transactional
 	@Override
 	public Category addChild(Long categoryId, Long subCategoryId, String subCategoryName) {
 		Category subCategory = Category.of(subCategoryId, subCategoryName);
-
-		Category category = findCategory(categoryId);
-		category.addChildCategory(subCategory);
-		return category;
+		return findCategory(categoryId)
+				.addChildCategory(subCategory);
 	}
 }

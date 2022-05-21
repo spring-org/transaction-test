@@ -47,10 +47,10 @@ public class Category {
 		return new Category(id, name);
 	}
 
-	public void addChildCategory(Category child) {
+	public Category addChildCategory(Category child) {
 		this.child.add(child); // parent에 sub 카테고리 추가
 		child.setParent(this); // sub 카테고리에 상위 카테고리 연결
-//		return this;
+		return this;
 	}
 
 	@Override
