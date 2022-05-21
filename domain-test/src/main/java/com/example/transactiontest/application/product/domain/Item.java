@@ -16,7 +16,6 @@ import java.util.Objects;
 public abstract class Item {
 
 	@Id
-	@GeneratedValue
 	@Column(name = "ITEM_ID")
 	private Long id;
 

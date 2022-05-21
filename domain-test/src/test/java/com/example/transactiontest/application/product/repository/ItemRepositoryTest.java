@@ -74,6 +74,16 @@ class ItemRepositoryTest {
 		}
 
 		/**
+		 * select count(*) as col_0_0_ from Item item0_ where item0_.ITEM_ID=?
+		 */
+		@ValueSource(longs = 1L)
+		@ParameterizedTest(name = "상품 존재여부 exists 쿼리 확인 테스트")
+		void testCase5(long id) {
+			boolean exists = itemRepository.existsById(id);
+			assertThat(exists).isTrue();
+		}
+
+		/**
 		 * select
 		 * item0_.ITEM_ID as item_id2_3_,
 		 * item0_.name as name3_3_,
@@ -87,7 +97,8 @@ class ItemRepositoryTest {
 		 * item0_.director as directo11_3_,
 		 * item0_.DTYPE as dtype1_3_
 		 * from
-		 * Item item0_ limit ? offset ?
+		 * Item item0_ limit ?,
+		 * ?
 		 * <p>
 		 * select
 		 * count(item0_.ITEM_ID) as col_0_0_
@@ -103,13 +114,44 @@ class ItemRepositoryTest {
 			assertThat(itemPage.getTotalPages()).isEqualTo(3);
 		}
 
+		@DisplayName("특정 상품 조회 테스트")
 		@ValueSource(longs = 1L)
-		@ParameterizedTest(name = "특정 상품 조회 테스트")
+		@ParameterizedTest(name = "Id:{0} 로 상품 조회")
 		void testCase2(long id) {
-			Item item = itemRepository.findById(id)
-					.orElseThrow(() -> new NotFoundItemException("존재하지 않는 상품입니다. : {}", id));
+			Item item = findById(id);
 			assertThat(item.getId()).isEqualTo(1L);
 			assertThat(item).isInstanceOf(Book.class);
 		}
+
+		/**
+		 * update
+		 * Item
+		 * set
+		 * name=?,
+		 * price=?,
+		 * stockQuantity=?,
+		 * author=?,
+		 * isbn=?
+		 * where
+		 * ITEM_ID=?
+		 */
+		@DisplayName("특정 상품 수정 테스트")
+		@ValueSource(longs = 1L)
+		@ParameterizedTest(name = "Id:{0} 상품 수정")
+		void testCase3(long id) {
+			Item item = findById(id);
+			item.addStock(2);
+
+			itemRepository.flush(); // update query
+			Item updatedItem = findById(id);
+
+			assertThat(updatedItem.getStockQuantity()).isEqualTo(2);
+		}
+
+		private Item findById(long id) {
+			return itemRepository.findById(id)
+					.orElseThrow(() -> new NotFoundItemException("존재하지 않는 상품입니다. : {}", id));
+		}
+
 	}
 }
