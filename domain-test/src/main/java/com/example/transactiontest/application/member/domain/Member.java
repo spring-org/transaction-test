@@ -53,6 +53,15 @@ public class Member {
 		return Objects.hash(id);
 	}
 
+	@Override
+	public String toString() {
+		return "Member{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", address=" + address +
+				'}';
+	}
+
 	public static class Builder {
 		private final Long id;
 		private String name;

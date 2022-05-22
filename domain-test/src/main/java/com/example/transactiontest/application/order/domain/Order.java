@@ -5,9 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Getter
@@ -31,7 +34,7 @@ public class Order {
 	private Delivery delivery;
 
 	@Setter
-	private Date orderDate;
+	private LocalDateTime orderDate;
 
 	@Setter
 	@Enumerated(EnumType.STRING)
@@ -64,11 +67,11 @@ public class Order {
 		}
 
 		order.setStatus(OrderStatus.ORDER);
-		order.setOrderDate(new Date());
+		order.setOrderDate(LocalDateTime.parse(LocalDateTime.now().toString(), DateTimeFormatter.ISO_DATE_TIME));
 		return order;
 	}
 
-	public void cancel() {
+	public Order cancel() {
 		if (delivery.getStatus() == DeliveryStatus.COMP) {
 			throw new RuntimeException("이미 배송완료된 상품은 취소가 불가능합니다.");
 		}
@@ -76,6 +79,7 @@ public class Order {
 		for (OrderItem orderItem : orderItems) {
 			orderItem.cancel();
 		}
+		return this;
 	}
 
 	// 조회
@@ -86,5 +90,30 @@ public class Order {
 		}
 
 		return totalPrice;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof Order)) return false;
+		Order order = (Order) o;
+		return Objects.equals(id, order.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public String toString() {
+		return "Order{" +
+				"id=" + id +
+				", member=" + member +
+				", orderItems=" + orderItems +
+				", delivery=" + delivery +
+				", orderDate=" + orderDate +
+				", status=" + status +
+				'}';
 	}
 }

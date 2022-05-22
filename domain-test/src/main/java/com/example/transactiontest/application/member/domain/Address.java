@@ -51,4 +51,13 @@ public class Address {
 	public int hashCode() {
 		return Objects.hash(city, street, zipcode);
 	}
+
+	@Override
+	public String toString() {
+		return "Address{" +
+				"city='" + city + '\'' +
+				", street='" + street + '\'' +
+				", zipcode='" + zipcode + '\'' +
+				'}';
+	}
 }

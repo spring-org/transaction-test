@@ -2,6 +2,7 @@ package com.example.transactiontest.application.product.domain;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import java.util.Objects;
 
 @Entity
 @DiscriminatorValue("B")
