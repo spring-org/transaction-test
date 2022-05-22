@@ -7,6 +7,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
@@ -14,6 +17,8 @@ import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
+import static com.example.transactiontest.application.member.stub.StubMember.address;
+import static com.example.transactiontest.application.member.stub.StubMember.makeMember;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -26,11 +31,11 @@ class MemberRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		memberRepository.saveAll(
-				List.of(makeMemberEntity(1L)
-						, makeMemberEntity(2L)
-						, makeMemberEntity(3L)
-						, makeMemberEntity(4L)
-						, makeMemberEntity(5L)));
+				List.of(makeMember(1L, address("서울시", "논현로", "11길"))
+						, makeMember(2L, address("서울시", "강남구", "테헤란로 111"))
+						, makeMember(3L, address("서울시", "양재동", "315-5번지"))
+						, makeMember(4L, address("서울시", "역삼동", "강남역"))
+						, makeMember(5L, address("서울시", "송파구", "올림픽로 3000"))));
 	}
 
 	@Nested
@@ -61,25 +66,19 @@ class MemberRepositoryTest {
 	class CommandMemberTest {
 
 		@DisplayName("고객 정보 수정 테스트")
-		@Test
-		void testCase1() {
-			long id = 1L;
+		@CsvSource(value = "1,서울시,논현로,11길,updatedMemberName")
+		@ParameterizedTest(name = "id:{0} 로 조회")
+		void testCase1(long id, String city, String street, String zipCode, String updatedName) {
 			Member member = memberRepository.findById(id)
 					.orElseThrow(() -> new NotFoundMemberException("존재하지 않는 사용자입니다. : {}", id));
-			member.update("updatedMemberName", makeAddress());
+
+			Address address = address(city, street, zipCode);
+
+			member.update(updatedName, address);
 			memberRepository.flush();
 
-			assertThat(member.getName()).isEqualTo("updatedMemberName");
-			assertThat(member.getAddress()).isEqualTo(makeAddress());
+			assertThat(member.getName()).isEqualTo(updatedName);
+			assertThat(member.getAddress()).isEqualTo(address);
 		}
-	}
-
-	private Address makeAddress() {
-		return new Address.Builder("서울시", "논현로", "11길")
-				.build();
-	}
-
-	private Member makeMemberEntity(long id) {
-		return new Member.Builder(id).build();
 	}
 }

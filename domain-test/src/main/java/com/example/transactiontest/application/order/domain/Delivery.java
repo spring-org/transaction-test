@@ -31,4 +31,13 @@ public class Delivery {
 		this.address = address;
 		this.status = DeliveryStatus.READY;
 	}
+
+	@Override
+	public String toString() {
+		return "Delivery{" +
+				"id=" + id +
+				", address=" + address +
+				", status=" + status +
+				'}';
+	}
 }
