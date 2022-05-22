@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Entity
@@ -12,6 +13,7 @@ import javax.persistence.*;
 public class OrderItem {
 
 	@Id
+	@Setter
 	@Column(name = "ORDER_ITEM_ID")
 	private Long id;
 
@@ -34,8 +36,9 @@ public class OrderItem {
 	}
 
 	// 생성 메서드
-	public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+	public static OrderItem createOrderItem(Long id, Item item, int orderPrice, int count) {
 		OrderItem orderItem = new OrderItem();
+		orderItem.setId(id);
 		orderItem.setItem(item);
 		orderItem.setOrderPrice(orderPrice);
 		orderItem.setCount(count);
@@ -51,6 +54,19 @@ public class OrderItem {
 
 	public int getTotalPrice() {
 		return getOrderPrice() * getCount();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof OrderItem)) return false;
+		OrderItem orderItem = (OrderItem) o;
+		return Objects.equals(id, orderItem.id);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 
 	@Override

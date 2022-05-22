@@ -71,7 +71,7 @@ public class Order {
 		return order;
 	}
 
-	public void cancel() {
+	public Order cancel() {
 		if (delivery.getStatus() == DeliveryStatus.COMP) {
 			throw new RuntimeException("이미 배송완료된 상품은 취소가 불가능합니다.");
 		}
@@ -79,6 +79,7 @@ public class Order {
 		for (OrderItem orderItem : orderItems) {
 			orderItem.cancel();
 		}
+		return this;
 	}
 
 	// 조회
