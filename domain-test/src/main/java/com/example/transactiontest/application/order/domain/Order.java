@@ -19,6 +19,7 @@ import java.util.Objects;
 public class Order {
 
 	@Id
+	@Setter
 	@Column(name = "ORDER_ID")
 	private Long id;
 
@@ -57,8 +58,9 @@ public class Order {
 	}
 
 	// business logic
-	public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
+	public static Order createOrder(Long id, Member member, Delivery delivery, OrderItem... orderItems) {
 		Order order = new Order();
+		order.setId(id);
 		order.setMember(member);
 		order.setDelivery(delivery);
 
