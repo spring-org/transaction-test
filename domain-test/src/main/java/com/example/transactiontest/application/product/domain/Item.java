@@ -16,6 +16,7 @@ import java.util.Objects;
 public abstract class Item {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ITEM_ID")
 	private Long id;
 
@@ -29,9 +30,7 @@ public abstract class Item {
 	protected Item() {
 	}
 
-	public Item(Long id, String name, int price, int stockQuantity) {
-		Objects.requireNonNull(id, "required id");
-		this.id = id;
+	protected Item(String name, int price, int stockQuantity) {
 		this.name = name;
 		this.price = price;
 		this.stockQuantity = stockQuantity;

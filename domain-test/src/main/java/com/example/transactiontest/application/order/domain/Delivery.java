@@ -27,8 +27,7 @@ public class Delivery {
 	protected Delivery() {
 	}
 
-	public Delivery(Long id, Address address) {
-		this.id = id;
+	public Delivery(Address address) {
 		this.address = address;
 		this.status = DeliveryStatus.READY;
 	}

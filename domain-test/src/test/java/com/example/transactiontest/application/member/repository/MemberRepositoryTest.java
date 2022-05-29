@@ -31,11 +31,11 @@ class MemberRepositoryTest {
 	@BeforeEach
 	void setUp() {
 		memberRepository.saveAll(
-				List.of(makeMember(1L, address("서울시", "논현로", "11길"))
-						, makeMember(2L, address("서울시", "강남구", "테헤란로 111"))
-						, makeMember(3L, address("서울시", "양재동", "315-5번지"))
-						, makeMember(4L, address("서울시", "역삼동", "강남역"))
-						, makeMember(5L, address("서울시", "송파구", "올림픽로 3000"))));
+				List.of(makeMember(address("서울시", "논현로", "11길"))
+						, makeMember(address("서울시", "강남구", "테헤란로 111"))
+						, makeMember(address("서울시", "양재동", "315-5번지"))
+						, makeMember(address("서울시", "역삼동", "강남역"))
+						, makeMember(address("서울시", "송파구", "올림픽로 3000"))));
 	}
 
 	@Nested

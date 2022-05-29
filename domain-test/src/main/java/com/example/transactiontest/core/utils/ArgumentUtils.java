@@ -1,4 +1,4 @@
-package com.example.transactiontest.core.exception.utils;
+package com.example.transactiontest.core.utils;
 
 public final class ArgumentUtils {
 

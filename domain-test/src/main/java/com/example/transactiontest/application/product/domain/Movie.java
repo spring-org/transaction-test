@@ -17,23 +17,18 @@ public class Movie extends Item {
 	}
 
 	private Movie(Builder builder) {
-		super(builder.id, builder.name, builder.price, builder.stockQuantity);
+		super(builder.name, builder.price, builder.stockQuantity);
 		this.director = builder.director;
 		this.actor = builder.actor;
 	}
 
 	public static class Builder {
-		private final Long id;
 		private String name;
 		private int price;
 		private int stockQuantity;
 
 		private String director;
 		private String actor;
-
-		public Builder(Long id) {
-			this.id = id;
-		}
 
 		public Builder name(String name) {
 			this.name = name;
@@ -67,7 +62,10 @@ public class Movie extends Item {
 
 	@Override
 	public String toString() {
-		return "[제목:" + getName() + " 감독:" + director + " 배우:" + actor + "]";
+		return "Movie{" +
+				"id='" + getId() + '\'' +
+				", director='" + director + '\'' +
+				", actor='" + actor + '\'' +
+				'}';
 	}
-
 }

@@ -14,7 +14,7 @@ class CategoryRepositoryTest {
 
 	@BeforeEach
 	void setUp() {
-		category = Category.of(1L, "1depth");
+		category = Category.of("1depth");
 	}
 
 	@Nested
@@ -24,17 +24,17 @@ class CategoryRepositoryTest {
 		@DisplayName("카테고리1 생성 및 추가")
 		@Test
 		void testCase1() {
-			Category child1 = Category.of(2L, "2-1depth");
+			Category child1 = Category.of( "2-1depth");
 			category.addChildCategory(child1);
-			assertThat(category.getChild()).contains(child1);
 			assertThat(category.getChild()).hasSize(1);
+			assertThat(category.getChild().get(0).getName()).isEqualTo(child1.getName());
 		}
 
 		@DisplayName("카테고리2 생성 및 추가")
 		@Test
 		void testCase2() {
-			Category child2 = Category.of(3L, "2-2depth");
-			Category child3 = Category.of(4L, "2-3depth");
+			Category child2 = Category.of("2-2depth");
+			Category child3 = Category.of("2-3depth");
 			category.addChildCategory(child2);
 			category.addChildCategory(child3);
 			assertThat(category.getChild()).contains(child2, child3);
@@ -49,11 +49,10 @@ class CategoryRepositoryTest {
 		@DisplayName("카테고리1 생성 및 추가")
 		@Test
 		void testCase1() {
-			Category category = Category.of(1L, "1depth");
-			Category child1 = Category.of(2L, "2-1depth");
+			Category category = Category.of("1depth");
+			Category child1 = Category.of("2-1depth");
 			category.addChildCategory(child1);
 
-			System.out.println("child1 = " + child1);
 			assertThat(child1.getParent()).isEqualTo(category);
 		}
 	}

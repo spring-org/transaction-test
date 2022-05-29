@@ -9,6 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 카테고리 등록
+ * 카테고리 조회
+ * 카테고리 수정 (카테고리 명)
+ */
 @Service
 @Transactional
 public class CategoryService implements CategoryQueryService, CategoryCommandService {
@@ -50,15 +55,15 @@ public class CategoryService implements CategoryQueryService, CategoryCommandSer
 
 	@Transactional
 	@Override
-	public Category save(Long categoryId, String categoryName) {
-		Category category = Category.of(categoryId, categoryName);
+	public Category save(String categoryName) {
+		Category category = Category.of(categoryName);
 		return categoryRepository.save(category);
 	}
 
 	@Transactional
 	@Override
-	public Category addChild(Long categoryId, Long subCategoryId, String subCategoryName) {
-		Category subCategory = Category.of(subCategoryId, subCategoryName);
+	public Category addChild(Long categoryId, String subCategoryName) {
+		Category subCategory = Category.of(subCategoryName);
 		return findCategory(categoryId)
 				.addChildCategory(subCategory);
 	}

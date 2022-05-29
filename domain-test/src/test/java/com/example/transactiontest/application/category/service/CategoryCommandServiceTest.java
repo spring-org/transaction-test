@@ -33,17 +33,23 @@ class CategoryCommandServiceTest {
 	private CategoryRepository categoryRepository;
 
 	@Nested
+	@TestInstance(PER_CLASS)
 	@DisplayName("생성 관련")
 	class CreateCategoryTest {
 
+		private Stream<Arguments> stubCategory() {
+			return Stream.of(Arguments.of(Category.of("서적")));
+		}
+
 		@DisplayName("단일 생성 테스트")
-		@Test
-		void testCase1(@Mock Category category) {
-			given(categoryRepository.save(any())).willReturn(category);
+		@MethodSource(value = "stubCategory")
+		@ParameterizedTest(name = "카테고리:{0} 생성")
+		void testCase1(Category actual) {
+			given(categoryRepository.save(any())).willReturn(actual);
 
-			categoryService.save(category.getId(), category.getName());
+			Category expected = categoryService.save(actual.getName());
 
-			then(categoryRepository).should().save(any());
+			assertThat(actual.getName()).isEqualTo(expected.getName());
 		}
 	}
 
@@ -58,18 +64,17 @@ class CategoryCommandServiceTest {
 
 		private Stream<Arguments> parentAndChild() {
 			return Stream.of(
-					Arguments.of(Category.of(1L, "서적")
-							, Category.of(2L, "소설책"))
+					Arguments.of(Category.of("서적"), Category.of("소설책"))
 			);
 		}
 
 		@MethodSource("parentAndChild")
 		@DisplayName("특정 카테고리 정보(상위 카테고리에 연결) 수정 테스트")
-		@ParameterizedTest(name = "상위 카테고리:{0}의 하위 카테고리 추가")
+		@ParameterizedTest(name = "상위 카테고리:{0}의 하위 카테고리:{1} 추가")
 		void testCase1(Category parent, Category child) {
 			given(categoryRepository.findById(parent.getId())).willReturn(Optional.of(parent));
 
-			Category actual = categoryService.addChild(parent.getId(), child.getId(), child.getName());
+			Category actual = categoryService.addChild(parent.getId(), child.getName());
 
 			assertThat(actual.getChild()).contains(child);
 		}

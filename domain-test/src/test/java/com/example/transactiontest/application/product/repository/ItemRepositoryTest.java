@@ -5,6 +5,7 @@ import com.example.transactiontest.application.product.domain.Book;
 import com.example.transactiontest.application.product.domain.Item;
 import com.example.transactiontest.application.product.domain.Movie;
 import com.example.transactiontest.application.product.exception.NotFoundItemException;
+import com.example.transactiontest.application.product.stub.ItemStub;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -35,7 +37,7 @@ class ItemRepositoryTest {
 		@DisplayName("책 상품 생성 확인")
 		@Test
 		void testCase1() {
-			Item item = new Book.Builder(1L).build();
+			Item item = ItemStub.book(1000, 10, "책", "저자", "isbn");
 			Item savedItem = itemRepository.save(item);
 
 			assertThat(savedItem).isInstanceOf(Book.class);
@@ -44,7 +46,7 @@ class ItemRepositoryTest {
 		@DisplayName("앨범 상품 생성 확인 테스트")
 		@Test
 		void testCase2() {
-			Item item = new Album.Builder(1L).build();
+			Item item = ItemStub.album(500, 1, "앨범", "아티스트", "팝");
 			Item savedItem = itemRepository.save(item);
 
 			assertThat(savedItem).isInstanceOf(Album.class);
@@ -53,7 +55,7 @@ class ItemRepositoryTest {
 		@DisplayName("영화 상품 생성 확인 테스트")
 		@Test
 		void testCase3() {
-			Item item = new Movie.Builder(1L).build();
+			Item item = ItemStub.movie(15000, 2, "영화", "감독", "주연");
 			Item savedItem = itemRepository.save(item);
 
 			assertThat(savedItem).isInstanceOf(Movie.class);
@@ -66,45 +68,22 @@ class ItemRepositoryTest {
 
 		@BeforeEach
 		void setUp() {
-			itemRepository.save(new Book.Builder(1L).build());
-			itemRepository.save(new Movie.Builder(2L).build());
-			itemRepository.save(new Album.Builder(3L).build());
-			itemRepository.save(new Album.Builder(4L).build());
-			itemRepository.save(new Album.Builder(5L).build());
+			itemRepository.deleteAll();
+			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
+			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
+			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
+			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
+			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
 		}
 
-		/**
-		 * select count(*) as col_0_0_ from Item item0_ where item0_.ITEM_ID=?
-		 */
+		@DisplayName("상품 존재여부 count(*) 쿼리 테스트")
 		@ValueSource(longs = 1L)
-		@ParameterizedTest(name = "상품 존재여부 exists 쿼리 확인 테스트")
+		@ParameterizedTest(name = "{0} 값에 해당하는 상품 여부 확인")
 		void testCase5(long id) {
 			boolean exists = itemRepository.existsById(id);
 			assertThat(exists).isTrue();
 		}
 
-		/**
-		 * select
-		 * item0_.ITEM_ID as item_id2_3_,
-		 * item0_.name as name3_3_,
-		 * item0_.price as price4_3_,
-		 * item0_.stockQuantity as stockqua5_3_,
-		 * item0_.artist as artist6_3_,
-		 * item0_.etc as etc7_3_,
-		 * item0_.author as author8_3_,
-		 * item0_.isbn as isbn9_3_,
-		 * item0_.actor as actor10_3_,
-		 * item0_.director as directo11_3_,
-		 * item0_.DTYPE as dtype1_3_
-		 * from
-		 * Item item0_ limit ?,
-		 * ?
-		 * <p>
-		 * select
-		 * count(item0_.ITEM_ID) as col_0_0_
-		 * from
-		 * Item item0_
-		 */
 		@DisplayName("상품 전체 조회 페이징 테스트")
 		@Test
 		void testCase1() {
@@ -118,40 +97,29 @@ class ItemRepositoryTest {
 		@ValueSource(longs = 1L)
 		@ParameterizedTest(name = "Id:{0} 로 상품 조회")
 		void testCase2(long id) {
-			Item item = findById(id);
+			Item item = getItem(id);
 			assertThat(item.getId()).isEqualTo(1L);
 			assertThat(item).isInstanceOf(Book.class);
 		}
 
-		/**
-		 * update
-		 * Item
-		 * set
-		 * name=?,
-		 * price=?,
-		 * stockQuantity=?,
-		 * author=?,
-		 * isbn=?
-		 * where
-		 * ITEM_ID=?
-		 */
 		@DisplayName("특정 상품 수정 테스트")
 		@ValueSource(longs = 1L)
 		@ParameterizedTest(name = "Id:{0} 상품 수정")
+		@Transactional(readOnly = true)
 		void testCase3(long id) {
-			Item item = findById(id);
+			Item item = getItem(id);
 			item.addStock(2);
 
 			itemRepository.flush(); // update query
-			Item updatedItem = findById(id);
+			Item updatedItem = getItem(id);
+			;
 
 			assertThat(updatedItem.getStockQuantity()).isEqualTo(2);
 		}
+	}
 
-		private Item findById(long id) {
-			return itemRepository.findById(id)
-					.orElseThrow(() -> new NotFoundItemException("존재하지 않는 상품입니다. : {}", id));
-		}
-
+	private Item getItem(long id) {
+		return itemRepository.findById(id)
+				.orElseThrow(() -> new NotFoundItemException("존재하지 않는 상품입니다. : {}", id));
 	}
 }

@@ -11,8 +11,8 @@ public final class StubMember {
 		return new Address.Builder(city, street, zipcode).build();
 	}
 
-	public static Member makeMember(Long id, Address address) {
-		return new Member.Builder(id)
+	public static Member makeMember(Address address) {
+		return new Member.Builder()
 				.address(address)
 				.build();
 	}

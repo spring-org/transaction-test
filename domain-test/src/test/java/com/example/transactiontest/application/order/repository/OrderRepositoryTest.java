@@ -30,11 +30,11 @@ class OrderRepositoryTest {
 
 		@BeforeEach
 		void setUp() {
-			member = new Member.Builder(3L).build();
-			delivery = new Delivery(7L, member.getAddress());
-			Item item = album(2L, 1000, 5, "앨범", "아티스트", "팜");
-			orderItem = OrderItem.createOrderItem(1L, item, item.getPrice(), 2);
-			orderEntity = Order.createOrder(4L, member, delivery, orderItem);
+			member = new Member.Builder().build();
+			delivery = new Delivery(member.getAddress());
+			Item item = album(1000, 5, "앨범", "아티스트", "팜");
+			orderItem = OrderItem.createOrderItem(item, item.getPrice(), 2);
+			orderEntity = Order.createOrder(member, delivery, orderItem);
 		}
 
 		@DisplayName("주문 등록 시 주문상태, 배달상태 정보 확인 테스트")
@@ -50,7 +50,7 @@ class OrderRepositoryTest {
 		@DisplayName("주문 등록 및 취소 시 상태 정보 확인 테스트")
 		@Test
 		void testCase2() {
-			Order order = Order.createOrder(5L, member, delivery, orderItem);
+			Order order = Order.createOrder(member, delivery, orderItem);
 			orderRepository.save(order);
 			Delivery orderDelivery = order.getDelivery();
 

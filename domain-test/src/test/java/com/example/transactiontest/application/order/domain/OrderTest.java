@@ -23,10 +23,10 @@ class OrderTest {
 
 	@BeforeEach
 	void setUp() {
-		member = makeMember(1L, address("서울시", "논현로", "11길"));
-		album = album(2L, 1000, 10, "앨범명", "아티스트", "팝");
-		book = book(3L, 500, 5, "서적명", "저자", "ISBN");
-		delivery = new Delivery(7L, member.getAddress());
+		member = makeMember(address("서울시", "논현로", "11길"));
+		album = album(1000, 10, "앨범명", "아티스트", "팝");
+		book = book(500, 5, "서적명", "저자", "ISBN");
+		delivery = new Delivery(member.getAddress());
 	}
 
 	@Nested
@@ -38,13 +38,13 @@ class OrderTest {
 		void testCase1() {
 			// 주문상품에 대해서 생성할 때 기존 상품에 대한 재고에 대해서 고려해야 함
 			OrderItem[] array = Arrays.array(
-					OrderItem.createOrderItem(4L, album, album.getPrice(), 2)
-					, OrderItem.createOrderItem(5L, book, book.getPrice(), 4)
+					OrderItem.createOrderItem(album, album.getPrice(), 2)
+					, OrderItem.createOrderItem(book, book.getPrice(), 4)
 			);
 			int totalPrice = java.util.Arrays.stream(array)
 					.mapToInt(OrderItem::getTotalPrice)
 					.sum();
-			Order order = Order.createOrder(6L, member, delivery, array);
+			Order order = Order.createOrder(member, delivery, array);
 
 			assertThat(order.getMember()).isEqualTo(member);
 			assertThat(order.getOrderItems()).contains(array);
@@ -56,11 +56,11 @@ class OrderTest {
 		@Test
 		void testCase2() {
 			OrderItem[] array = Arrays.array(
-					OrderItem.createOrderItem(4L, album, album.getPrice(), 2)
-					, OrderItem.createOrderItem(5L, book, book.getPrice(), 4)
+					OrderItem.createOrderItem(album, album.getPrice(), 2)
+					, OrderItem.createOrderItem(book, book.getPrice(), 4)
 			);
 
-			Order order = Order.createOrder(6L, member, delivery, array);
+			Order order = Order.createOrder(member, delivery, array);
 			Delivery delivery = order.getDelivery();
 			assertThat(order.getStatus()).isEqualTo(OrderStatus.ORDER);
 			assertThat(delivery.getStatus()).isEqualTo(DeliveryStatus.READY);
