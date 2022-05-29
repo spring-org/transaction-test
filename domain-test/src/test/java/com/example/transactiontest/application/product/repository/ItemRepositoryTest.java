@@ -69,28 +69,11 @@ class ItemRepositoryTest {
 		@BeforeEach
 		void setUp() {
 			itemRepository.deleteAll();
+			itemRepository.save(ItemStub.book(15000, 2, "영화", "저자", "isbn"));
 			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
 			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
+			itemRepository.save(ItemStub.album(15000, 2, "영화", "아티스트", "팝"));
 			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
-			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
-			itemRepository.save(ItemStub.movie(15000, 2, "영화", "감독", "주연"));
-		}
-
-		@DisplayName("상품 존재여부 count(*) 쿼리 테스트")
-		@ValueSource(longs = 1L)
-		@ParameterizedTest(name = "{0} 값에 해당하는 상품 여부 확인")
-		void testCase5(long id) {
-			boolean exists = itemRepository.existsById(id);
-			assertThat(exists).isTrue();
-		}
-
-		@DisplayName("상품 전체 조회 페이징 테스트")
-		@Test
-		void testCase1() {
-			Pageable pageable = PageRequest.of(1, 2);
-			Page<Item> itemPage = itemRepository.findAll(pageable);
-
-			assertThat(itemPage.getTotalPages()).isEqualTo(3);
 		}
 
 		@DisplayName("특정 상품 조회 테스트")
@@ -112,7 +95,6 @@ class ItemRepositoryTest {
 
 			itemRepository.flush(); // update query
 			Item updatedItem = getItem(id);
-			;
 
 			assertThat(updatedItem.getStockQuantity()).isEqualTo(2);
 		}
