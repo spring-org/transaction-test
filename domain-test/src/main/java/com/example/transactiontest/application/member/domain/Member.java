@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.example.transactiontest.core.exception.utils.ArgumentUtils.existsParam;
+import static com.example.transactiontest.core.utils.ArgumentUtils.existsParam;
 
 @Getter
 @Entity
@@ -29,7 +29,6 @@ public class Member {
 	}
 
 	private Member(Builder builder) {
-		this.id = builder.id;
 		this.name = builder.name;
 		this.address = builder.address;
 	}
@@ -63,12 +62,10 @@ public class Member {
 	}
 
 	public static class Builder {
-		private final Long id;
 		private String name;
 		private Address address;
 
-		public Builder(Long id) {
-			this.id = id;
+		public Builder() {
 		}
 
 		public Builder name(String name) {

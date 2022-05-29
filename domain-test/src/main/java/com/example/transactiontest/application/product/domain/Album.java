@@ -17,22 +17,17 @@ public class Album extends Item {
 	}
 
 	private Album(Builder builder) {
-		super(builder.id, builder.name, builder.price, builder.stockQuantity);
+		super(builder.name, builder.price, builder.stockQuantity);
 		this.artist = builder.artist;
 		this.etc = builder.etc;
 	}
 
 	public static class Builder {
-		private final Long id;
 		private String name;
 		private int price;
 		private int stockQuantity;
 		private String artist;
 		private String etc;
-
-		public Builder(Long id) {
-			this.id = id;
-		}
 
 		public Builder name(String name) {
 			this.name = name;
@@ -68,7 +63,8 @@ public class Album extends Item {
 	@Override
 	public String toString() {
 		return "Album{" +
-				"artist='" + artist + '\'' +
+				"id='" + getId() + '\'' +
+				", artist='" + artist + '\'' +
 				", etc='" + etc + '\'' +
 				'}';
 	}

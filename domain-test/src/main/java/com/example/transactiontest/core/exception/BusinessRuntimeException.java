@@ -1,6 +1,7 @@
 package com.example.transactiontest.core.exception;
 
 import java.text.MessageFormat;
+import java.util.Arrays;
 
 public abstract class BusinessRuntimeException extends RuntimeException {
 
@@ -14,6 +15,14 @@ public abstract class BusinessRuntimeException extends RuntimeException {
 
 	@Override
 	public String getMessage() {
-		return MessageFormat.format(message, params);
+		return MessageFormat.format(message, requiredNotNull(params) ? parseParams(params) : "");
+	}
+
+	private String parseParams(Object[] values) {
+		return String.join(",", Arrays.toString(values));
+	}
+
+	private boolean requiredNotNull(Object[] values) {
+		return values != null && values.length > 0;
 	}
 }

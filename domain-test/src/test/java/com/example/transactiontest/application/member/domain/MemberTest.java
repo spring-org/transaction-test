@@ -22,9 +22,9 @@ class MemberTest {
 		@ValueSource(longs = 1L)
 		void testCase1(Long id) {
 			// 객체
-			Member actual = makeMember(id, null);
+			Member actual = makeMember(null);
 
-			Member expected = makeMember(id, null);
+			Member expected = makeMember(null);
 
 			assertThat(actual).isEqualTo(expected);
 		}
@@ -37,8 +37,8 @@ class MemberTest {
 		@DisplayName("고객 정보 수정(name) 테스트")
 		@CsvSource(value = {"1,sr"})
 		@ParameterizedTest(name = "Id:{0} zipcode:{1} 등록")
-		void testCase1(Long id, String name) {
-			Member actual = makeMember(id, null);
+		void testCase1(String name) {
+			Member actual = makeMember(null);
 
 			Member expected = actual.update(name, null);
 			assertThat(expected.getName()).isEqualTo(name);
@@ -48,8 +48,8 @@ class MemberTest {
 		@DisplayName("고객 정보 수정(address) 테스트")
 		@CsvSource(value = {"1,서울시,논현로,1234"})
 		@ParameterizedTest(name = "Id:{0} zipcode:{1} 등록")
-		void testCase2(Long id, String city, String street, String zipcode) {
-			Member actual = makeMember(id, null);
+		void testCase2(String city, String street, String zipcode) {
+			Member actual = makeMember(null);
 
 			Member expected = actual.update(null,address(city, street, zipcode));
 
@@ -60,8 +60,8 @@ class MemberTest {
 		@DisplayName("고객 정보 수정(address: zipcode) 테스트")
 		@CsvSource(value = {"1,서울시,논현로,preZipCode,postZipCode"})
 		@ParameterizedTest(name = "id:{0}에 해당하는 Member의 Address:zipcode 필드 {1}에서 {2}으로 수정")
-		void testCase3(long id, String city, String street, String originZipCode, String updatedZipCode) {
-			Member actual = makeMember(id, address(city, street, originZipCode));
+		void testCase3(String city, String street, String originZipCode, String updatedZipCode) {
+			Member actual = makeMember(address(city, street, originZipCode));
 
 			Member expected = actual.update(null, address(city, street, updatedZipCode));
 

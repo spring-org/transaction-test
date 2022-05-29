@@ -13,7 +13,7 @@ import java.util.Objects;
 public class OrderItem {
 
 	@Id
-	@Setter
+	@GeneratedValue
 	@Column(name = "ORDER_ITEM_ID")
 	private Long id;
 
@@ -36,9 +36,8 @@ public class OrderItem {
 	}
 
 	// 생성 메서드
-	public static OrderItem createOrderItem(Long id, Item item, int orderPrice, int count) {
+	public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
 		OrderItem orderItem = new OrderItem();
-		orderItem.setId(id);
 		orderItem.setItem(item);
 		orderItem.setOrderPrice(orderPrice);
 		orderItem.setCount(count);

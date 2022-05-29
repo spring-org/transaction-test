@@ -19,7 +19,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
 @DisplayName("카테고리 클래스 Query")
@@ -61,9 +60,7 @@ class CategoryQueryServiceTest {
 	class SearchCategoryTest {
 		@DisplayName("카테고리 상위 노드 조회 테스트")
 		@Test
-		void testCase1() {
-			Category parent = Category.of(1L, "의류"); // 값을 검증하기 위한 parent
-			Category child = mock(Category.class);
+		void testCase1(@Mock Category parent, @Mock Category child) {
 
 			given(categoryRepository.findById(anyLong())).willReturn(Optional.of(child));
 			given(child.getParent()).willReturn(parent);
@@ -75,9 +72,7 @@ class CategoryQueryServiceTest {
 
 		@DisplayName("카테고리 하위 노드 조회 테스트")
 		@Test
-		void testCase2() {
-			Category parent = mock(Category.class); // 값을 검증하기 위한 parent
-			Category child = Category.of(2L, "상의");
+		void testCase2(@Mock Category parent, @Mock Category child) {
 
 			given(categoryRepository.findById(anyLong())).willReturn(Optional.of(parent));
 			given(parent.getChild()).willReturn(Collections.singletonList(child));

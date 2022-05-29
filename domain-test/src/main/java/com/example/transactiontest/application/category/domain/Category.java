@@ -14,6 +14,7 @@ import java.util.Objects;
 public class Category {
 
 	@Id
+	@GeneratedValue
 	@Column(name = "CATEGORY_ID")
 	private Long id;
 
@@ -38,13 +39,12 @@ public class Category {
 	protected Category() {
 	}
 
-	private Category(Long id, String name) {
-		this.id = id;
+	private Category(String name) {
 		this.name = name;
 	}
 
-	public static Category of(Long id, String name) {
-		return new Category(id, name);
+	public static Category of(String name) {
+		return new Category(name);
 	}
 
 	public Category addChildCategory(Category child) {
